@@ -2,8 +2,8 @@ import type {Metadata} from 'next';
 import './globals.css'; // Global styles
 
 export const metadata: Metadata = {
-  title: 'AL REHMAN ACADEMY | Professional Home & Online Tuition',
-  description: 'Expert Home and Online Tutoring Services. Connect with qualified tutors for all subjects and grades.',
+  title: 'Al Rehman Academy | Home & Online Tuition in Jeddah & Lahore',
+  description: 'Al Rehman Academy offers quality home and online tuition for students in Jeddah and Lahore. Find experienced tutors and flexible learning options.',
 };
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
