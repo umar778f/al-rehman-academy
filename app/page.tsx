@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import { Navigation } from '@/components/navigation';
 import { Footer } from '@/components/footer';
 import { FaqAccordion } from '@/components/faq-accordion';
@@ -13,7 +16,69 @@ import {
   Book,
 } from 'lucide-react';
 
+const WHATSAPP_NUMBER = '923154485676';
+
+const initialFormData = {
+  name: '',
+  phone: '',
+  email: '',
+  address: '',
+  city: '',
+  state: '',
+  postalCode: '',
+  country: '',
+  subject: '',
+  message: '',
+};
+
 export default function HomePage() {
+  const [formData, setFormData] = useState(initialFormData);
+
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = event.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const requiredFields = [
+      formData.name,
+      formData.phone,
+      formData.email,
+      formData.city,
+      formData.subject,
+      formData.message,
+    ];
+
+    if (requiredFields.some((field) => !field.trim())) {
+      window.alert('Please fill in your name, phone, email, city, subject, and message before sending.');
+      return;
+    }
+
+    const message = [
+      'Hello, I would like to hire a tutor.',
+      '',
+      `Name: ${formData.name}`,
+      `Phone: ${formData.phone}`,
+      `Email: ${formData.email}`,
+      `Address: ${formData.address || 'Not provided'}`,
+      `City: ${formData.city}`,
+      `State/Province: ${formData.state || 'Not provided'}`,
+      `ZIP / Postal Code: ${formData.postalCode || 'Not provided'}`,
+      `Country: ${formData.country || 'Not provided'}`,
+      `Subject: ${formData.subject}`,
+      '',
+      'Message:',
+      formData.message,
+    ].join('\n');
+
+    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <main className="min-h-screen font-sans bg-[#F8FAFC] text-[#1E293B]">
       <Navigation />
@@ -281,53 +346,107 @@ export default function HomePage() {
             <p className="text-[10px] text-[#64748B] uppercase tracking-widest font-bold">Note: This form is only for students and parents who want to hire a tutor.</p>
           </div>
           
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="space-y-2">
               <label className="text-[10px] uppercase font-bold text-[#64748B] tracking-wider block">Name</label>
-              <input type="text" placeholder="John Doe" className="w-full bg-white border border-[#E2E8F0] rounded-lg p-3 text-sm focus:outline-none focus:border-[#2563EB]" />
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="John Doe"
+                className="w-full bg-white border border-[#E2E8F0] rounded-lg p-3 text-sm focus:outline-none focus:border-[#2563EB]"
+              />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <label className="text-[10px] uppercase font-bold text-[#64748B] tracking-wider block">Phone</label>
-                <input type="tel" placeholder="+1 (555) 000-0000" className="w-full bg-white border border-[#E2E8F0] rounded-lg p-3 text-sm focus:outline-none focus:border-[#2563EB]" />
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  placeholder="+92 300 0000000"
+                  className="w-full bg-white border border-[#E2E8F0] rounded-lg p-3 text-sm focus:outline-none focus:border-[#2563EB]"
+                />
               </div>
 
               <div className="space-y-2">
                 <label className="text-[10px] uppercase font-bold text-[#64748B] tracking-wider block">Email Address</label>
-                <input type="email" placeholder="john@example.com" className="w-full bg-white border border-[#E2E8F0] rounded-lg p-3 text-sm focus:outline-none focus:border-[#2563EB]" />
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="john@example.com"
+                  className="w-full bg-white border border-[#E2E8F0] rounded-lg p-3 text-sm focus:outline-none focus:border-[#2563EB]"
+                />
               </div>
             </div>
 
             <div className="space-y-2">
               <label className="text-[10px] uppercase font-bold text-[#64748B] tracking-wider block">Street Address</label>
-              <input type="text" placeholder="123 Main St" className="w-full bg-white border border-[#E2E8F0] rounded-lg p-3 text-sm focus:outline-none focus:border-[#2563EB]" />
+              <input
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                placeholder="123 Main St"
+                className="w-full bg-white border border-[#E2E8F0] rounded-lg p-3 text-sm focus:outline-none focus:border-[#2563EB]"
+              />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <label className="text-[10px] uppercase font-bold text-[#64748B] tracking-wider block">City</label>
-                <input type="text" placeholder="City" className="w-full bg-white border border-[#E2E8F0] rounded-lg p-3 text-sm focus:outline-none focus:border-[#2563EB]" />
+                <input
+                  type="text"
+                  name="city"
+                  value={formData.city}
+                  onChange={handleChange}
+                  placeholder="City"
+                  className="w-full bg-white border border-[#E2E8F0] rounded-lg p-3 text-sm focus:outline-none focus:border-[#2563EB]"
+                />
               </div>
               <div className="space-y-2">
                 <label className="text-[10px] uppercase font-bold text-[#64748B] tracking-wider block">State/Province</label>
-                <input type="text" placeholder="State" className="w-full bg-white border border-[#E2E8F0] rounded-lg p-3 text-sm focus:outline-none focus:border-[#2563EB]" />
+                <input
+                  type="text"
+                  name="state"
+                  value={formData.state}
+                  onChange={handleChange}
+                  placeholder="State"
+                  className="w-full bg-white border border-[#E2E8F0] rounded-lg p-3 text-sm focus:outline-none focus:border-[#2563EB]"
+                />
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <label className="text-[10px] uppercase font-bold text-[#64748B] tracking-wider block">ZIP / Postal Code</label>
-                <input type="text" placeholder="Postal Code" className="w-full bg-white border border-[#E2E8F0] rounded-lg p-3 text-sm focus:outline-none focus:border-[#2563EB]" />
+                <input
+                  type="text"
+                  name="postalCode"
+                  value={formData.postalCode}
+                  onChange={handleChange}
+                  placeholder="Postal Code"
+                  className="w-full bg-white border border-[#E2E8F0] rounded-lg p-3 text-sm focus:outline-none focus:border-[#2563EB]"
+                />
               </div>
               <div className="space-y-2">
                 <label className="text-[10px] uppercase font-bold text-[#64748B] tracking-wider block">Country</label>
-                <select className="w-full bg-white border border-[#E2E8F0] rounded-lg p-3 text-sm focus:outline-none focus:border-[#2563EB] appearance-none">
+                <select
+                  name="country"
+                  value={formData.country}
+                  onChange={handleChange}
+                  className="w-full bg-white border border-[#E2E8F0] rounded-lg p-3 text-sm focus:outline-none focus:border-[#2563EB] appearance-none"
+                >
                   <option value="">Select country</option>
-                  <option value="PK">Pakistan</option>
-                  <option value="SA">Saudi Arabia</option>
-                  <option value="AE">UAE</option>
-                  <option value="US">USA</option>
+                  <option value="Pakistan">Pakistan</option>
+                  <option value="Saudi Arabia">Saudi Arabia</option>
+                  <option value="UAE">UAE</option>
+                  <option value="USA">USA</option>
                   <option value="UK">UK</option>
                 </select>
               </div>
@@ -335,12 +454,26 @@ export default function HomePage() {
 
             <div className="space-y-2">
               <label className="text-[10px] uppercase font-bold text-[#64748B] tracking-wider block">Subject</label>
-              <input type="text" placeholder="Subject" className="w-full bg-white border border-[#E2E8F0] rounded-lg p-3 text-sm focus:outline-none focus:border-[#2563EB]" />
+              <input
+                type="text"
+                name="subject"
+                value={formData.subject}
+                onChange={handleChange}
+                placeholder="Subject"
+                className="w-full bg-white border border-[#E2E8F0] rounded-lg p-3 text-sm focus:outline-none focus:border-[#2563EB]"
+              />
             </div>
 
             <div className="space-y-2">
               <label className="text-[10px] uppercase font-bold text-[#64748B] tracking-wider block">Message</label>
-              <textarea rows={4} placeholder="Tell us about your requirements..." className="w-full bg-white border border-[#E2E8F0] rounded-lg p-3 text-sm focus:outline-none focus:border-[#2563EB] resize-y"></textarea>
+              <textarea
+                rows={4}
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                placeholder="Tell us about your requirements..."
+                className="w-full bg-white border border-[#E2E8F0] rounded-lg p-3 text-sm focus:outline-none focus:border-[#2563EB] resize-y"
+              ></textarea>
             </div>
 
             <div className="pt-4">
